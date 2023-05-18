@@ -24,3 +24,18 @@ class ModelDataTest(unittest.TestCase):
 
         self.assertEqual(len(communciation_network.vertices()), 37103)
         self.assertEqual(len(communciation_network.hyperedges()), 309740)
+
+
+class TestJsonImport(unittest.TestCase):
+    def test_json_module(self):
+        try:
+            import orjson
+            json_module = orjson
+        except ImportError:
+            import json
+            json_module = json
+
+        if 'orjson' in globals():
+            self.assertIs(json_module, orjson, "orjson module should be used when available")
+        else:
+            self.assertIs(json_module, json, "json module should be used when orjson is not available")
