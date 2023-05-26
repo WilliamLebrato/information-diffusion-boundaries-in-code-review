@@ -31,7 +31,11 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(len(cn_empty.vertices()), 0)
         self.assertEqual(len(cn_empty.hyperedges()), 0)
 
-    
+    def test_isolated_vertex(self):
+        cn_isolated = CommunicationNetwork({'h1': ['v1']}, {'h1': 1})
+        self.assertEqual(len(cn_isolated.vertices()), 1)
+        self.assertEqual(len(cn_isolated.hyperedges()), 1)
+        
     # def test_correct_loading_of_json_data(self):
     #     test_file_path = Path('./data/networks/microsoft.json.bz2')  
     #     test_name = "test"
