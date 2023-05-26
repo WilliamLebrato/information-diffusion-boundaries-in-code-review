@@ -35,7 +35,14 @@ class ModelTest(unittest.TestCase):
         cn_isolated = CommunicationNetwork({'h1': ['v1']}, {'h1': 1})
         self.assertEqual(len(cn_isolated.vertices()), 1)
         self.assertEqual(len(cn_isolated.hyperedges()), 1)
-        
+
+    def test_large_network(self):
+            if version.parse(platform.python_version()) < version.parse('3.9'):
+                self.skipTest("This test requires Python 3.9 or higher")
+            cn_very_large = CommunicationNetwork({f'h{i}': [f'v{j}' for j in range(1000)] for i in range(1000)}, {f'h{i}': i for i in range(1000)})
+            self.assertEqual(len(cn_very_large.vertices()), 1000)
+            self.assertEqual(len(cn_very_large.hyperedges()), 1000)
+
     # def test_correct_loading_of_json_data(self):
     #     test_file_path = Path('./data/networks/microsoft.json.bz2')  
     #     test_name = "test"
