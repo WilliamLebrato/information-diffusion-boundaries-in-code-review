@@ -24,3 +24,10 @@ class MinimalPath(unittest.TestCase):
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
+
+    def test_hypergraph_large(self):
+        cn_very_large = CommunicationNetwork({f'h{i}': [f'v{j}' for j in range(100)] for i in range(100)}, {f'h{i}': i for i in range(100)})
+        result_1 = single_source_dijkstra_vertices(cn_very_large, 'v1', DistanceType.SHORTEST, min_timing=0)
+        result_2 = single_source_dijkstra_hyperedges(cn_very_large, 'v1', DistanceType.SHORTEST, min_timing=0)
+        self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
+
