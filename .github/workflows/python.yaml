@@ -34,6 +34,9 @@ jobs:
 
       - name: Run tests with Python 3.10
         run: pytest test
+      
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
 
   build-311:
     runs-on: ubuntu-latest
@@ -63,5 +66,8 @@ jobs:
 
       - name: Run tests with Python 3.11
         run: pytest test
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
   
 
