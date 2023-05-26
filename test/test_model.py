@@ -1,6 +1,8 @@
 import unittest
 
 from simulation.model import CommunicationNetwork
+import platform
+from packaging import version
 
 
 class ModelTest(unittest.TestCase):
@@ -14,6 +16,14 @@ class ModelTest(unittest.TestCase):
     def test_hyperedges(self):
         self.assertEqual(len(ModelTest.cn.hyperedges()), 3)
         self.assertEqual(ModelTest.cn.hyperedges('v1'), {'h1'})
+
+    def test_timings(self):
+        self.assertEqual(len(ModelTest.cn.timings()), 3)
+        self.assertEqual(ModelTest.cn.timings('h1'), 1)
+        self.assertEqual(ModelTest.cn.timings('h2'), 2)
+        self.assertEqual(ModelTest.cn.timings('h3'), 3)
+
+        
 
 
 class ModelDataTest(unittest.TestCase):
