@@ -11,14 +11,22 @@ from packaging import version
 class ModelTest(unittest.TestCase):
 
     cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
+    cn1 = CommunicationNetwork({'h1': ['v1', 'v2', 'v3', 'v4', 'v5', 'v6'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
 
     def test_vertices(self):
         self.assertEqual(len(ModelTest.cn.vertices()), 4)
+        self.assertEqual(ModelTest.cn.vertices(), {'v1', 'v2', 'v3', 'v4'})
         self.assertEqual(ModelTest.cn.vertices('h1'), {'v1', 'v2'})
+        self.assertEqual(ModelTest.cn.vertices('h2'), {'v2', 'v3'})
+        self.assertEqual(ModelTest.cn.vertices('h3'), {'v4', 'v3'})
+        self.assertEqual(ModelTest.cn1.vertices('h1'), {'v1', 'v2', 'v3', 'v4', 'v5', 'v6'})
 
     def test_hyperedges(self):
         self.assertEqual(len(ModelTest.cn.hyperedges()), 3)
         self.assertEqual(ModelTest.cn.hyperedges('v1'), {'h1'})
+        self.assertEqual(ModelTest.cn.hyperedges('v2'), {'h1', 'h2'})
+        self.assertEqual(ModelTest.cn.hyperedges('v3'), {'h2', 'h3'})
+        self.assertEqual(ModelTest.cn.hyperedges('v4'), {'h3'})
 
     def test_timings(self):
         self.assertEqual(len(ModelTest.cn.timings()), 3)
