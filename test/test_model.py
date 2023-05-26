@@ -6,7 +6,6 @@ import bz2
 from simulation.model import CommunicationNetwork
 import platform
 from packaging import version
-import unittest
 
 
 
@@ -97,17 +96,20 @@ class ModelDataTest(unittest.TestCase):
         self.assertEqual(len(communciation_network.hyperedges()), 309740)
 
 
-
 class TestJsonImport(unittest.TestCase):
     def test_json_module(self):
         try:
             import orjson
-            json_module = orjson
         except ImportError:
-            json_module = None
+            orjson = None
+
+        if 'orjson' in globals() and orjson is not None:
+            json_module = orjson
+        else:
+            import json
+            json_module = json
 
         if 'orjson' in globals():
-            self.assertIsNotNone(json_module, "orjson module should be used when available")
+            self.assertIs(json_module, orjson, "orjson module should be used when available")
         else:
-            self.assertIsNotNone(json_module, "json module should be used when orjson is not available")
-
+            self.assertIs(json_module, json, "json module should be used when orjson is not available")
