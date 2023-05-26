@@ -36,7 +36,7 @@ jobs:
         run: pytest test
 
       - name: Run tests with Python 3.10
-        run: pytest --cov=my_package tests/
+        run: pytest --cov=my_package
       
       
       - name: Upload coverage reports to Codecov
@@ -74,7 +74,7 @@ jobs:
         run: pytest test
     
       - name: Run tests with Python 3.11
-        run: pytest --cov=my_package tests/
+        run: pytest --cov=my_package 
       
 
       - name: Upload coverage reports to Codecov
