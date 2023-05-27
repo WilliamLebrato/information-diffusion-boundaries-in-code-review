@@ -34,6 +34,10 @@ jobs:
 
       - name: Run tests with Python 3.10
         run: pytest test
+
+      - name: Run tests with Python 3.10
+        run: pytest --cov=test/
+      
       
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
@@ -68,6 +72,10 @@ jobs:
 
       - name: Run tests with Python 3.11
         run: pytest test
+    
+      - name: Run tests with Python 3.11
+        run: pytest --cov=test/
+      
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

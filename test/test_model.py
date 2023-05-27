@@ -8,6 +8,7 @@ import platform
 from packaging import version
 
 
+
 class ModelTest(unittest.TestCase):
 
     cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
@@ -99,8 +100,12 @@ class TestJsonImport(unittest.TestCase):
     def test_json_module(self):
         try:
             import orjson
-            json_module = orjson
         except ImportError:
+            orjson = None
+
+        if 'orjson' in globals() and orjson is not None:
+            json_module = orjson
+        else:
             import json
             json_module = json
 
