@@ -2,6 +2,8 @@ import argparse
 from pathlib import Path
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import cProfile
+
 
 import pandas as pd
 from tqdm import tqdm
@@ -64,4 +66,4 @@ def run_simulation():
 
 
 if __name__ == '__main__':
-    run_simulation()
+    cProfile.run('run_simulation()', 'outputfile')
