@@ -13,10 +13,10 @@ class TestPerformance(unittest.TestCase):
         run_simulation()
         end_time = timeit.default_timer()
         print(f"Execution time: {end_time - start_time} seconds")
-
-    def test_performance_pstats(self):
         p = pstats.Stats('outputfile')
         p.sort_stats('cumulative').print_stats(20)
+
+
 
 # class TestArguments(unittest.TestCase):
 #     @patch('argparse.ArgumentParser.parse_args',
