@@ -37,3 +37,12 @@ class MinimalPath(unittest.TestCase):
         result_2 = single_source_dijkstra_hyperedges(cn_zero, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
+class MinimalPathExceptionHandling(unittest.TestCase):
+        def test_minimal_path_unknown_vertice(self):
+            cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
+
+            with self.assertRaises(Exception):
+                single_source_dijkstra_vertices(cn, 'v69', DistanceType.SHORTEST, min_timing=0)
+
+            with self.assertRaises(Exception):
+                single_source_dijkstra_hyperedges(cn, 'v69', DistanceType.SHORTEST, min_timing=0)
