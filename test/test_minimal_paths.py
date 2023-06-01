@@ -32,7 +32,7 @@ class MinimalPath(unittest.TestCase):
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
     def test_hypergraph_zero(self):
-        cn_zero = CommunicationNetwork({}, {})
+        cn_zero = CommunicationNetwork({'v1': []}, {})  # Add 'v1' vertex with an empty list of hyperedges
         result_1 = single_source_dijkstra_vertices(cn_zero, 'v1', DistanceType.SHORTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(cn_zero, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
