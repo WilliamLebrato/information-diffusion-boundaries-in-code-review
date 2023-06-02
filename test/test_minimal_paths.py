@@ -62,7 +62,7 @@ class TestBoundaryCases(unittest.TestCase):
 class TestNegativeWeights(unittest.TestCase):
     cn_negative_weights = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': -1, 'h2': -2, 'h3': -3})
 
-        # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected.
+        # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected. (FAILS)
     def test_negative_weights(self):
         with self.assertRaises(Exception):
             single_source_dijkstra_vertices(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
