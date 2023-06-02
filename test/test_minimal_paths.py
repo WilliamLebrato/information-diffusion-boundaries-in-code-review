@@ -1,7 +1,7 @@
 import unittest
 
 from simulation.model import CommunicationNetwork
-from simulation.minimal_paths import single_source_dijkstra_vertices, single_source_dijkstra_hyperedges, DistanceType
+from simulation.minimal_paths import single_source_dijkstra_vertices, single_source_dijkstra_hyperedges, single_source_bellman_ford_hypergraph, DistanceType
 
 
 class MinimalPath(unittest.TestCase):
@@ -30,6 +30,17 @@ class MinimalPath(unittest.TestCase):
         result_1 = single_source_dijkstra_vertices(cn_very_large, 'v1', DistanceType.SHORTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(cn_very_large, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
+
+
+    def test_bellman_ford_shortest_path(self):
+        result_bellman_ford = single_source_bellman_ford_hypergraph(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+        self.assertEqual(result_bellman_ford, {'v2': 1, 'v3': 2, 'v4': 3}, 'Bellman-Ford failed to find the shortest path')
+
+    def test_bellman_ford_vs_dijkstra(self):
+        result_bellman_ford = single_source_bellman_ford_hypergraph(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+        result_dijkstra = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+        self.assertEqual(result_bellman_ford, result_dijkstra, 'Bellman-Ford and Dijkstra implementations are not equivalent')
+
 
 
 class MinimalPathExceptionHandling(unittest.TestCase):

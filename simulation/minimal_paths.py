@@ -99,3 +99,53 @@ def single_source_dijkstra_vertices(hypergraph: TimeVaryingHypergraph, source_ve
     minimal_distances.pop(source_vertex)
 
     return minimal_distances
+
+def single_source_bellman_ford_hypergraph(hypergraph: TimeVaryingHypergraph, source_vertex, distance_type: DistanceType, min_timing=datetime.min):
+    vertices = hypergraph.vertices()
+    hedges = hypergraph.hyperedges()
+
+    distances: dict = {vertex: float('inf') for vertex in vertices}
+    predecessor: dict = {vertex: None for vertex in vertices}
+
+    match distance_type:
+        case DistanceType.SHORTEST:
+            distances[source_vertex] = 0
+        case DistanceType.FASTEST:
+            distances[source_vertex] = min_timing - min_timing
+        case DistanceType.FOREMOST:
+            distances[source_vertex] = min_timing
+
+    for _ in range(len(vertices) - 1):
+        for hedge in hedges:
+            vertex_set = hypergraph.vertices(hedge)
+            weight = hypergraph.timings(hedge)
+            for vertex in vertex_set:
+                for neighbour in vertex_set:
+                    if vertex != neighbour:
+                        match distance_type:
+                            case DistanceType.SHORTEST:
+                                new_distance = distances[vertex] + 1
+                            case DistanceType.FASTEST:
+                                new_distance = distances[vertex] + (weight - distances[vertex])
+                            case DistanceType.FOREMOST:
+                                new_distance = weight
+                        if new_distance < distances[neighbour]:
+                            distances[neighbour] = new_distance
+                            predecessor[neighbour] = vertex
+
+    # Checking for negative cycles:
+    for hedge in hedges:
+        vertex_set = hypergraph.vertices(hedge)
+        weight = hypergraph.timings(hedge)
+        for vertex in vertex_set:
+            for neighbour in vertex_set:
+                if vertex != neighbour:
+                    assert distances[neighbour] <= distances[vertex] + weight, "Hypergraph contains a negative-weight cycle"
+
+    minimal_distances: dict = {}
+    for vertex, distance in distances.items():
+        if vertex not in minimal_distances or distance < minimal_distances[vertex]:
+            minimal_distances[vertex] = distance
+    minimal_distances.pop(source_vertex)
+
+    return minimal_distances
