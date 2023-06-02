@@ -17,14 +17,5 @@ class TestPerformance(unittest.TestCase):
         p.sort_stats('cumulative').print_stats(20)
 
 
-
-# class TestArguments(unittest.TestCase):
-#     @patch('argparse.ArgumentParser.parse_args',
-#            return_value=argparse.Namespace(param1="value1", param2="value2"))
-#     def test_argument_parsing(self):
-#         args = run_simulation()
-#         self.assertEqual(args.param1, "value1")
-#         self.assertEqual(args.param2, "value2")
-
 if __name__ == "__main__":
     unittest.main()
