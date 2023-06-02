@@ -60,7 +60,7 @@ class TestBoundaryCases(unittest.TestCase):
             single_source_dijkstra_vertices(TestBoundaryCases.cn_empty, 'v1', DistanceType.SHORTEST, min_timing=0)
             single_source_dijkstra_hyperedges(TestBoundaryCases.cn_empty, 'v1', DistanceType.SHORTEST, min_timing=0)
     
-    @unittest.skip("fails")
+    @unittest.expectedFailure
     def test_single_vertex(self):
         self.assertEqual(single_source_dijkstra_vertices(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
         self.assertEqual(single_source_dijkstra_hyperedges(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
@@ -69,7 +69,7 @@ class TestNegativeWeights(unittest.TestCase):
     cn_negative_weights = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': -1, 'h2': -2, 'h3': -3})
 
         # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected.
-    @unittest.skip("fails")
+    @unittest.expectedFailure
     def test_negative_weights(self):
         with self.assertRaises(Exception):
             single_source_dijkstra_vertices(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
@@ -98,7 +98,7 @@ class TestInvalidInputs(unittest.TestCase):
         with self.assertRaises(simulation.model.EntityNotFound):
             single_source_dijkstra_vertices(TestInvalidInputs.cn, 'INVALID_VERTEX', DistanceType.SHORTEST, min_timing=0)
 
-    @unittest.skip("fails")
+    @unittest.expectedFailure
     def test_invalid_min_timing(self):
         with self.assertRaises(Exception):
             single_source_dijkstra_vertices(TestInvalidInputs.cn, 'v1', DistanceType.SHORTEST, min_timing='INVALID_MIN_TIMING')

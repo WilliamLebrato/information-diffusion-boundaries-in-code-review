@@ -50,40 +50,42 @@ class ModelTest(unittest.TestCase):
             cn_very_large = CommunicationNetwork({f'h{i}': [f'v{j}' for j in range(1000)] for i in range(1000)}, {f'h{i}': i for i in range(1000)})
             self.assertEqual(len(cn_very_large.vertices()), 1000)
             self.assertEqual(len(cn_very_large.hyperedges()), 1000)
+    @unittest.expectedFailure
+    def test_correct_loading_of_json_data(self):
+        test_file_path = Path('./data/networks/microsoft.json.bz2')  
+        test_name = "test"
 
-    # def test_correct_loading_of_json_data(self):
-    #     test_file_path = Path('./data/networks/microsoft.json.bz2')  
-    #     test_name = "test"
+        test_data = {
+        "1": {"participants": ["A", "B"], "end": "2023-05-26T11:08:38.766561"},
+        }
 
-    #     test_data = {
-    #     "1": {"participants": ["A", "B"], "end": "2023-05-26T11:08:38.766561"},
-    #     }
+        with open(test_file_path, 'w') as f:
+            json.dump(test_data, f)
 
-    #     with open(test_file_path, 'w') as f:
-    #         json.dump(test_data, f)
-
-    #     instance = CommunicationNetwork.from_json(test_file_path, name=test_name)
+        instance = CommunicationNetwork.from_json(test_file_path, name=test_name)
         
-    #     assert isinstance(instance, CommunicationNetwork)
+        assert isinstance(instance, CommunicationNetwork)
 
-    # def test_from_json_with_incorrect_bz2_data(self):
-    #     test_file_path = "test.bz2"
-        
-    #     # Write some non-bz2 data to the file
-    #     with open(test_file_path, 'wb') as f:
-    #         f.write(b'not bz2 data')
+    @unittest.expectedFailure
+    def test_from_json_with_incorrect_bz2_data(self):
+        test_file_path = "test.bz2"
 
-    #     self.assertRaises(ValueError, CommunicationNetwork.from_json, test_file_path)
+        # Write some non-bz2 data to the file
+        with open(test_file_path, 'wb') as f:
+            f.write(b'not bz2 data')
 
-    # def test_from_json_with_non_bz2_compressed_file(self):
-    #     test_file_path = Path('./data/networks/test.json.bz2')  # replace with your actual test file path
+        self.assertRaises(ValueError, CommunicationNetwork.from_json, test_file_path)
 
-    #     # Write some non-bz2-compressed data to the file
-    #     with open(test_file_path, 'wb') as f:
-    #         f.write(b'some data')
+    @unittest.expectedFailure
+    def test_from_json_with_non_bz2_compressed_file(self):
+        test_file_path = Path('./data/networks/test.json.bz2')  # replace with your actual test file path
 
+        # Write some non-bz2-compressed data to the file
+        with open(test_file_path, 'wb') as f:
+            f.write(b'some data')
 
-    #     self.assertRaises(OSError, CommunicationNetwork.from_json, test_file_path)
+        self.assertRaises(OSError, CommunicationNetwork.from_json, test_file_path)
+
 
 class ModelDataTest(unittest.TestCase):
     def test_model_with_data(self):
