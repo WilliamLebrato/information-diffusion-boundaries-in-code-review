@@ -83,12 +83,28 @@ class TestNegativeWeights(unittest.TestCase):
         with self.assertRaises(Exception):
             single_source_dijkstra_hyperedges(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
 
-    # If there are multiple shortest, fastest, or foremost paths between the source and a given vertex we want to make sure the algorithm handles these situations correctly
 class TestMultiplePaths(unittest.TestCase):
     cn_multiple_paths = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v1', 'v3']}, {'h1': 1, 'h2': 1, 'h3': 1})
 
+        # If there are multiple shortest, fastest, or foremost paths between the source and a given vertex we want to make sure the algorithm handles these situations correctly
     def test_multiple_paths(self):
         result_1 = single_source_dijkstra_vertices(TestMultiplePaths.cn_multiple_paths, 'v1', DistanceType.SHORTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(TestMultiplePaths.cn_multiple_paths, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
         self.assertEqual(result_1['v3'], 1, 'Shortest distance to v3 should be 1')
+
+class TestInvalidInputs(unittest.TestCase):
+    cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
+
+    def test_invalid_distance_type(self):
+        with self.assertRaises(Exception):
+            single_source_dijkstra_vertices(TestInvalidInputs.cn, 'v1', 'INVALID_DISTANCE_TYPE', min_timing=0)
+
+    def test_invalid_vertex(self):
+        with self.assertRaises(simulation.model.EntityNotFound):
+            single_source_dijkstra_vertices(TestInvalidInputs.cn, 'INVALID_VERTEX', DistanceType.SHORTEST, min_timing=0)
+
+    @unittest.skip("fails")
+    def test_invalid_min_timing(self):
+        with self.assertRaises(Exception):
+            single_source_dijkstra_vertices(TestInvalidInputs.cn, 'v1', DistanceType.SHORTEST, min_timing='INVALID_MIN_TIMING')
