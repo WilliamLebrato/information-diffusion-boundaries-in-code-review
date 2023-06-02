@@ -65,20 +65,30 @@ class TestBoundaryCases(unittest.TestCase):
             single_source_dijkstra_vertices(TestBoundaryCases.cn_empty, 'v1', DistanceType.SHORTEST, min_timing=0)
             single_source_dijkstra_hyperedges(TestBoundaryCases.cn_empty, 'v1', DistanceType.SHORTEST, min_timing=0)
 
-    @unittest.skipIf(True, "Skipping test_single_vertex")
+    
+    @unittest.skip("fails")
     def test_single_vertex(self): # (FAILS)
         self.assertEqual(single_source_dijkstra_vertices(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
         self.assertEqual(single_source_dijkstra_hyperedges(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
 
 class TestNegativeWeights(unittest.TestCase):
-
     cn_negative_weights = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': -1, 'h2': -2, 'h3': -3})
 
-    # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected. (FAILS)
-    @unittest.skipIf(True, "Skipping test_negative_weights")
+        # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected. (FAILS)
+    @unittest.skip("fails")
     def test_negative_weights(self):
         with self.assertRaises(Exception):
             single_source_dijkstra_vertices(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
 
         with self.assertRaises(Exception):
             single_source_dijkstra_hyperedges(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
+
+    # If there are multiple shortest, fastest, or foremost paths between the source and a given vertex we want to make sure the algorithm handles these situations correctly
+class TestMultiplePaths(unittest.TestCase):
+    cn_multiple_paths = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v1', 'v3']}, {'h1': 1, 'h2': 1, 'h3': 1})
+
+    def test_multiple_paths(self):
+        result_1 = single_source_dijkstra_vertices(TestMultiplePaths.cn_multiple_paths, 'v1', DistanceType.SHORTEST, min_timing=0)
+        result_2 = single_source_dijkstra_hyperedges(TestMultiplePaths.cn_multiple_paths, 'v1', DistanceType.SHORTEST, min_timing=0)
+        self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
+        self.assertEqual(result_1['v3'], 1, 'Shortest distance to v3 should be 1')
