@@ -48,7 +48,7 @@ class TestBoundaryCases(unittest.TestCase):
     cn_empty = CommunicationNetwork({}, {})
     cn_single_vertex = CommunicationNetwork({'h1': ['v1']}, {'h1': 1})
 
-    # For an empty graph the EntityNotFound exeption should be raised
+        # For an empty graph the EntityNotFound exeption should be raised
     def test_empty_graph(self):
         with self.assertRaises(simulation.model.EntityNotFound):
             single_source_dijkstra_vertices(TestBoundaryCases.cn_empty, 'v1', DistanceType.SHORTEST, min_timing=0)
@@ -59,3 +59,13 @@ class TestBoundaryCases(unittest.TestCase):
         self.assertEqual(single_source_dijkstra_vertices(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
         self.assertEqual(single_source_dijkstra_hyperedges(TestBoundaryCases.cn_single_vertex, 'v1', DistanceType.SHORTEST, min_timing=0), {'v1': 0}, 'Provided a graph of only one vertex the expected result is a dictionary with one key and the value 0.')
 
+class TestNegativeWeights(unittest.TestCase):
+    cn_negative_weights = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': -1, 'h2': -2, 'h3': -3})
+
+        # Dijkstras algorithm should not handle negative weights, therefore an exeption is expected.
+    def test_negative_weights(self):
+        with self.assertRaises(Exception):
+            single_source_dijkstra_vertices(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
+
+        with self.assertRaises(Exception):
+            single_source_dijkstra_hyperedges(TestNegativeWeights.cn_negative_weights, 'v1', DistanceType.SHORTEST, min_timing=0)
